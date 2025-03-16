@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draw Polygon & Convert to PostGIS</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.28/esri/themes/light/main.css">
+    <script src="https://js.arcgis.com/4.28/"></script>
+    <script src="https://unpkg.com/terraformer"></script>
+    <script src="https://unpkg.com/terraformer-wkt-parser"></script>
+    <script src="https://unpkg.com/terraformer-arcgis-parser"></script>
+    <style>
+        html, body, #viewDiv {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="viewDiv"></div>
+
+    <script>
+        require([
+            "esri/Map",
+            "esri/views/MapView",
+            "esri/layers/GraphicsLayer",
+            "esri/widgets/Sketch",
+            "esri/Graphic"
+        ], function(Map, MapView, GraphicsLayer, Sketch, Graphic) {
+
+            const graphicsLayer = new GraphicsLayer();
+            const map = new Map({
+                basemap: "streets",
+                layers: [graphicsLayer]
+            });
+
+            const view = new MapView({
+                container: "viewDiv",
+                map: map,
+                center: [17, 0],
+                zoom: 3
+            });
+
+            const sketch = new Sketch({
+                layer: graphicsLayer,
+                view: view,
+                creationMode: "update"
+            });
+            view.ui.add(sketch, "top-right");
+
+            sketch.on("create", function(event) {
+                if (event.state === "complete") {
+                    const polygonGeometry = event.graphic.geometry.toJSON();
+
+                    try {
+                        // Convert Esri JSON to GeoJSON
+                        const geojson = Terraformer.ArcGIS.parse(polygonGeometry);
+
+                        // Convert GeoJSON to WKT
+                        const wkt = Terraformer.WKT.convert(geojson);
+
+                        console.log("PostGIS WKT Format:", wkt);
+                        console.log("PostGIS GeoJSON Format:", JSON.stringify(geojson));
+
+                        alert("Polygon converted to WKT! Check the console.");
+                    } catch (error) {
+                        console.error("Conversion Error:", error);
+                        alert("Failed to convert geometry.");
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

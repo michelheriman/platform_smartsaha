@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draw Polygon & Convert to PostGIS</title>
+    <link rel="stylesheet" href="https://js.arcgis.com/4.31/esri/themes/light/main.css">
+    <script src="https://js.arcgis.com/4.31/"></script>
+    <script src="https://unpkg.com/terraformer"></script>
+    <script src="https://unpkg.com/terraformer-wkt-parser"></script>
+    <!--script src="https://cdn.jsdelivr.net/npm/terraformer@1.0.12"></script-->
+    <script src="https://unpkg.com/terraformer-arcgis-parser"></script>
+    <script defer src="./inp_map_loader_poly.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        html, body, #viewDiv {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar -->
+    <header class="h-16 bg-gradient-to-r from-green-600 to-blue-500 text-white flex items-center justify-between px-6 md:px-12 shadow-lg">
+        <a href="https://smartsaha.vercel.app">
+            <img src="./logo.png" alt="FARARANO_MIRINDRA" class="w-12 h-12">
+        </a>
+        
+        <ul class="hidden md:flex space-x-8 text-lg font-medium">
+            <li><a href="./index.html" class="hover:text-gray-300">Dashboard</a></li>
+            <li><a href="./inputs_polygon.html" class="hover:text-gray-300">Input Polygon</a></li>
+            <li><a href="./inputs.html" class="hover:text-gray-300">Input Point</a></li>
+            <li><a href="https://smartsaha.vercel.app" class="hover:text-gray-300">Smart Saha</a></li>
+            <li><a href="https://smartsaha.vercel.app/contact.html" class="hover:text-gray-300">Contact</a></li>
+        </ul>
+
+        <!-- Mobile Menu Button -->
+        <button id="menu-toggle" class="md:hidden focus:outline-none">
+            <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+            </svg>
+        </button>
+    </header>
+
+    <!-- Mobile Menu -->
+    <nav id="mobile-menu" class="hidden md:hidden bg-green-600 text-white py-4">
+        <ul class="flex flex-col items-center space-y-4 text-lg">
+            <li><a href="./index.html" class="hover:text-gray-300">Dashboard</a></li>
+            <li><a href="./inputs_polygon.html" class="hover:text-gray-300">Input Polygon</a></li>
+            <li><a href="./inputs.html" class="hover:text-gray-300">Input Point</a></li>
+            <li><a href="https://smartsaha.vercel.app" class="hover:text-gray-300">Smart Saha</a></li>
+            <li><a href="https://smartsaha.vercel.app/contact.html" class="hover:text-gray-300">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div id="viewDiv"></div>
+    <!-- Fixed Window in Bottom-Left -->
+    <!--div class="fixed bottom-6 left-3 w-80 h-40 bg-blue-500 text-white p-4 shadow-lg rounded-lg">
+        <h2 class="text-lg font-semibold">Your parcels</h2>
+        <p>I'm always in the bottom-left corner.</p>
+        <div>
+            <label for="parcel_owner" class="block text-sm font-medium text-gray-700">Owner name</label>
+            <input type="text" id="parcel_owner" name="parcel_owner" required minlength="4" maxlength="500" step="0.01" placeholder="Parcel owner"
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-3 py-2 focus:ring-blue-500 focus:border-blue-500" 
+                aria-label="Owner">
+        </div>
+        <div>
+            <label for="parcel_name" class="block text-sm font-medium text-gray-700">Parcel name</label>
+            <input type="text" id="parcel_name" name="parcel_name" required minlength="4" maxlength="500" step="0.01" placeholder="Parcel name"
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-3 py-2 focus:ring-blue-500 focus:border-blue-500" 
+                aria-label="parcel name">
+        </div>
+    </div-->
+
+    <div class="fixed bottom-6 left-3 w-11/12 max-w-sm h-auto bg-blue-500 text-white p-4 shadow-lg rounded-lg z-50">
+        <h2 class="text-lg font-semibold">Your parcels</h2>
+        <p class="mb-2" id = "username_"></p>
+        <button id="logout" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 ease-in-out transform hover:scale-105 w-full sm:w-auto">
+            Logout
+        </button>
+        
+        <div class="mb-2">
+            <label for="parcel_owner" class="block text-sm font-medium text-white">Owner name</label>
+            <input type="text" id="parcel_owner" name="parcel_owner" required minlength="4" maxlength="500" step="0.01" placeholder="Parcel owner"
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-3 py-2 focus:ring-blue-500 focus:border-blue-500 text-black" 
+                aria-label="Owner">
+        </div>
+        <div>
+            <label for="parcel_name" class="block text-sm font-medium text-white">Parcel name</label>
+            <input type="text" id="parcel_name" name="parcel_name" required minlength="4" maxlength="500" step="0.01" placeholder="Parcel name"
+                class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm px-3 py-2 focus:ring-blue-500 focus:border-blue-500 text-black" 
+                aria-label="parcel name">
+        </div>
+    </div>
+
+    <!-- JavaScript for Mobile Menu Toggle -->
+    <script>
+        const menuToggle = document.getElementById("menu-toggle");
+        const mobileMenu = document.getElementById("mobile-menu");
+
+        menuToggle.addEventListener("click", () => {
+            mobileMenu.classList.toggle("hidden");
+        });
+    </script>
+
+    <!--script>
+        require([
+            "esri/Map",
+            "esri/views/MapView",
+            "esri/layers/GraphicsLayer",
+            "esri/widgets/Sketch",
+            "esri/Graphic"
+        ], function(Map, MapView, GraphicsLayer, Sketch, Graphic) {
+
+            const graphicsLayer = new GraphicsLayer();
+            const map = new Map({
+                basemap: "streets",
+                layers: [graphicsLayer]
+            });
+
+            const view = new MapView({
+                container: "viewDiv",
+                map: map,
+                center: [17, 0],
+                zoom: 3
+            });
+
+            const sketch = new Sketch({
+                layer: graphicsLayer,
+                view: view,
+                creationMode: "update"
+            });
+            view.ui.add(sketch, "top-right");
+
+            sketch.on("create", function(event) {
+                if (event.state === "complete") {
+                    const polygonGeometry = event.graphic.geometry.toJSON();
+
+                    try {
+                        // Convert Esri JSON to GeoJSON
+                        const geojson = Terraformer.ArcGIS.parse(polygonGeometry);
+
+                        // Convert GeoJSON to WKT
+                        const wkt = Terraformer.WKT.convert(geojson);
+
+                        console.log("PostGIS WKT Format:", wkt);
+                        console.log("PostGIS GeoJSON Format:", JSON.stringify(geojson));
+
+                        alert("Polygon converted to WKT! Check the console.");
+                    } catch (error) {
+                        console.error("Conversion Error:", error);
+                        alert("Failed to convert geometry.");
+                    }
+                }
+            });
+        });
+    </script-->
+</body>
+<button id="backToTop" 
+    class="hidden fixed bottom-5 right-5 bg-blue-500 text-white py-2 px-4 rounded-full shadow-lg hover:bg-blue-600 transition duration-300">
+    ↑ Back to Top
+</button>
+</html>

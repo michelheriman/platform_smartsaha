@@ -1,0 +1,101 @@
+<!--DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./style.css">
+    <title>Map Dashboard</title>
+</head>
+<body class="bg-gradient-to-r from-green-500 to-blue-400">
+    <header class="h-14 bg-gradient-to-r from-green-500 to-blue-400 text-white flex justify-between">
+        <nav class = "flex justify-start">
+            <a href="https://smartsaha.vercel.app" class = "nav-log">
+                <img src="./logo.png" alt="FARARANO_MIRINDRA" width="54" height="54" viewBox="0 0 54 54">
+            </a>
+
+        </nav>
+
+        <ul class="hidden md:flex space-x-8">
+            <li><a href="https://smartsaha.vercel.app" class="hover:text-gray-300">Smart Saha</a></li>
+            <li><a href="https://smartsaha.vercel.app/contact.html" class="hover:text-gray-300">Contact</a></li>
+        </ul>
+
+    </header>
+    <iframe src="./map.html" frameborder="0" class="h-screen w-full"></iframe>
+
+</body>
+</html-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Map Dashboard</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        /* Custom Styles */
+        .nav-item {
+            @apply text-lg font-medium transition duration-300 hover:text-gray-300;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-r from-green-500 to-blue-400 min-h-screen">
+
+    <!-- Header / Navbar -->
+    <header class="h-16 bg-gradient-to-r from-green-600 to-blue-500 text-white flex items-center justify-between px-6 md:px-12 shadow-lg">
+        
+        <!-- Logo -->
+        <a href="https://smartsaha.vercel.app" class="flex items-center">
+            <img src="./logo.png" alt="FARARANO_MIRINDRA" class="w-12 h-12">
+        </a>
+
+        <!-- Desktop Menu -->
+        <ul class="hidden md:flex space-x-8">
+            <li><a href="./index.html" class="nav-item">Dashboard</a></li>
+            <li><a href="./inputs_polygon.html" class="nav-item">input Polygon</a></li>
+            <li><a href="./inputs.html" class="nav-item">input Point</a></li>
+            <li><a href="https://smartsaha.vercel.app" class="nav-item">Smart Saha</a></li>
+            <li><a href="https://smartsaha.vercel.app/contact.html" class="nav-item">Contact</a></li>
+        </ul>
+
+        <!-- Mobile Menu Button -->
+        <button id="menu-toggle" class="md:hidden focus:outline-none">
+            <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+            </svg>
+        </button>
+    </header>
+
+    <!-- Mobile Menu -->
+    <nav id="mobile-menu" class="hidden md:hidden bg-green-600 text-white py-4">
+        <ul class="flex flex-col items-center space-y-4">
+            <li><a href="./index.html" class="nav-item">Dashboard</a></li>
+            <li><a href="./inputs_polygon.html" class="nav-item">input Polygon</a></li>
+            <li><a href="./inputs.html" class="nav-item">input Point</a></li>
+            <li><a href="https://smartsaha.vercel.app" class="nav-item">Smart Saha</a></li>
+            <li><a href="https://smartsaha.vercel.app/contact.html" class="nav-item">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Fullscreen Map -->
+    <div class="relative w-full h-[calc(100vh-4rem)]">
+        <iframe src="./map.html" frameborder="0" class="absolute top-0 left-0 w-full h-full"></iframe>
+    </div>
+
+    <!-- JavaScript for Mobile Menu Toggle -->
+    <script>
+        const menuToggle = document.getElementById("menu-toggle");
+        const mobileMenu = document.getElementById("mobile-menu");
+
+        menuToggle.addEventListener("click", () => {
+            mobileMenu.classList.toggle("hidden");
+        });
+    </script>
+
+</body>
+</html>
