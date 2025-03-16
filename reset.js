@@ -7,7 +7,7 @@ async function sendResetEmail(event) {
     event.preventDefault();
     const email = document.getElementById("email").value;
     const { error } = await supabase_.auth.resetPasswordForEmail(email, {
-        redirectTo: "./update_password.html"
+        redirectTo: "https://platformsmartsaha.vercel.app/update_password.html"
     });
 
     if (error) {
