@@ -7,12 +7,21 @@ async function resetPassword(event) {
     event.preventDefault();
     const newPassword = document.getElementById("password").value;
 
+    // Get access token from URL
+    const params = new URLSearchParams(window.location.hash.substring(1));
+    const access_token = params.get("access_token");
+
+    if (!access_token) {
+      document.getElementById("message").textContent = "Invalid or missing token.";
+      return;
+    }
+
+    // Update user password
     const { error } = await supabase_.auth.updateUser({ password: newPassword });
 
     if (error) {
-        document.getElementById("message").textContent = error.message;
+      document.getElementById("message").textContent = error.message;
     } else {
-        document.getElementById("message").textContent = "Password reset successful! You can now log in.";
-        window.location.replace("./signin.html")
+      document.getElementById("message").textContent = "Password updated successfully!";
     }
-}
+  };
