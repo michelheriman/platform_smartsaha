@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"-->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="./soil_loader.js"></script>
+
+    <title>Soil Dashboard</title>
+</head>
+<body >
+    <!-- Navbar -->
+    <header class="h-16 bg-gradient-to-r from-green-600 to-blue-500 text-white flex items-center justify-between px-6 md:px-12 shadow-lg">
+        <a href="https://smartsaha.vercel.app">
+            <img src="./logo.png" alt="FARARANO_MIRINDRA" class="w-12 h-12">
+        </a>
+        
+        <ul class="hidden md:flex space-x-8 text-lg font-medium">
+            <li><a href="./soil_dashboard.html" class="hover:text-gray-300">Soil</a></li>
+            <li><a href="./index.html" class="hover:text-gray-300">Dashboard</a></li>
+            <li><a href="./inputs_polygon.html" class="hover:text-gray-300">Input Polygon</a></li>
+            <li><a href="./inputs.html" class="hover:text-gray-300">Input Point</a></li>
+            <li><a href="https://smartsaha.vercel.app" class="hover:text-gray-300">Smart Saha</a></li>
+            <li><a href="https://smartsaha.vercel.app/contact.html" class="hover:text-gray-300">Contact</a></li>
+        </ul>
+
+        <!-- Mobile Menu Button -->
+        <button id="menu-toggle" class="md:hidden focus:outline-none">
+            <svg class="w-8 h-8 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+            </svg>
+        </button>
+    </header>
+
+    <!-- Mobile Menu -->
+    <nav id="mobile-menu" class="hidden md:hidden bg-green-600 text-white py-4">
+        <ul class="flex flex-col items-center space-y-4 text-lg">
+            <li><a href="./soil_dashboard.html" class="hover:text-gray-300">Soil</a></li>
+            <li><a href="./index.html" class="hover:text-gray-300">Dashboard</a></li>
+            <li><a href="./inputs_polygon.html" class="hover:text-gray-300">Input Polygon</a></li>
+            <li><a href="./inputs.html" class="hover:text-gray-300">Input Point</a></li>
+            <li><a href="https://smartsaha.vercel.app" class="hover:text-gray-300">Smart Saha</a></li>
+            <li><a href="https://smartsaha.vercel.app/contact.html" class="hover:text-gray-300">Contact</a></li>
+        </ul>
+    </nav>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 p-4" id = "main"></div>
+
+    <script>
+        const menuToggle = document.getElementById("menu-toggle");
+        const mobileMenu = document.getElementById("mobile-menu");
+
+        menuToggle.addEventListener("click", () => {
+            mobileMenu.classList.toggle("hidden");
+        });
+    </script>
+    
+</body>
+</html>
